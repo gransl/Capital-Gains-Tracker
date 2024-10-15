@@ -16,29 +16,33 @@ public class LedgerEntry {
             throw new IllegalArgumentException("Must enter ticker symbol");
         }
         this.symbol = symbol;
-    }
-
-    public LedgerEntry(StockPurchase stockBuy) {
         purchase = new LinkedDeque<>();
-        purchase.addToFront(stockBuy);
-        symbol = purchase.getFront().getSymbol();
     }
 
-    public String getSymbol() {
-        return symbol;
+
+    public void addPurchaseFront(StockPurchase stock)  {
+        purchase.addToFront(stock);
     }
 
-    public void addPurchaseFront(StockPurchase stockBuy)  {
-        purchase.addToFront(stockBuy);
+    public void addPurchaseBack(StockPurchase stock) {
+        purchase.addToBack(stock);
     }
 
-    public void addPurchaseBack(StockPurchase stockBuy) {
-        purchase.addToBack(stockBuy);
+    public StockPurchase removePurchaseFront() {
+        return purchase.removeFront();
+    }
+
+    public StockPurchase removePurchaseBack() {
+        return purchase.removeBack();
+    }
+
+    public int size() {
+        return purchase.size();
     }
 
     /**
-     * This method determines if a ticker symbol matches a stock purchase
-     * @return true if a ticker symbol matches the StockPurchase, false if not
+     * This method determines if a ticker symbol matches a LedgerEntry
+     * @return true if a ticker symbol matches LedgerEntry, false if not
      */
     public boolean matchesSymbol(String stockSymbol) {
         if (this.symbol.equals(stockSymbol)) {

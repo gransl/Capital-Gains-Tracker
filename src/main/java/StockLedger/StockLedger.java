@@ -4,23 +4,17 @@ import java.util.ArrayList;
 
 public class StockLedger implements StockLedgerInterface {
     private ArrayList<LedgerEntry> stocks;
-    private double expenditures;
-    private double revenue;
-    private double profit;
+    private double totalExpenditures;
+    private double totalRevenue;
+    private double totalCapitalGains;
 
     public StockLedger() {
         stocks = new ArrayList<>();
-        expenditures = 0.0;
-        revenue = 0.0;
-        profit = 0.0;
+        totalExpenditures = 0.0;
+        totalRevenue = 0.0;
+        totalCapitalGains = 0.0;
     }
 
-    public StockLedger(LedgerEntry stockBuy) {
-        stocks = new ArrayList<>();
-        expenditures = 0.0;
-        revenue = 0.0;
-        profit = 0.0;
-    }
 
     /**
      * Records a stock purchase in this ledger.
@@ -32,10 +26,13 @@ public class StockLedger implements StockLedgerInterface {
     @Override
     public void buy(String stockSymbol, int sharesBought, double pricePerShare) {
         StockPurchase tempBuy = new StockPurchase(stockSymbol, pricePerShare);
+        LedgerEntry tempLedger = getEntry(stockSymbol);
+        stocks.remove(tempLedger);
         for (int i = 0; i < sharesBought; i++) {
-            getEntry(stockSymbol).addPurchaseFront(tempBuy);
+            tempLedger.addPurchaseFront(tempBuy);
         }
-        expenditures += sharesBought * pricePerShare;
+        stocks.add(tempLedger);
+        totalExpenditures += sharesBought * pricePerShare;
     }
 
     /**
@@ -49,7 +46,34 @@ public class StockLedger implements StockLedgerInterface {
      */
     @Override
     public double sell(String stockSymbol, int sharesSold, double pricePerShare) {
-        return 0;
+        LedgerEntry ledger = getEntry(stockSymbol);
+        int ledgerSize = ledger.size();
+
+        if (ledgerSize == 0) {
+            stocks.remove(ledger);
+            throw new IllegalArgumentException("You do not have any shares of " + stockSymbol + ".");
+        } else if (sharesSold > ledgerSize) {
+            throw new IllegalArgumentException("You only have " + ledgerSize + " " + stockSymbol + " share(s).");
+        }
+
+        double buyTotal = 0;
+        double capitalGain = 0;
+
+        stocks.remove(ledger);
+        StockPurchase tempPurchase;
+
+        for (int i = 0; i < sharesSold; i++) {
+            tempPurchase = ledger.removePurchaseFront();
+            buyTotal += tempPurchase.getCost();
+        }
+
+        stocks.add(ledger);
+
+        totalRevenue = sharesSold * pricePerShare;
+        capitalGain = sharesSold * pricePerShare - buyTotal;
+        totalCapitalGains += capitalGain;
+
+        return capitalGain;
     }
 
     /**
@@ -82,10 +106,31 @@ public class StockLedger implements StockLedgerInterface {
             }
         }
 
-        // no existing ledger found, make new one
+        // no existing ledger found, make new one and it to the Stock Ledger
         LedgerEntry newLedger = new LedgerEntry(stockSymbol);
+        stocks.add(newLedger);
         return newLedger;
     }
+
+    /**
+     * returns current total profit across all stock purchases and sells
+     *
+     * @return total profit
+     */
+    public double getProfit() {
+        return totalRevenue - totalExpenditures;
+    }
+
+    /**
+     * returns current total capital gains for all stock sells
+     *
+     * @return total capital gains
+     */
+    public double getCapitalGains() {
+        return totalCapitalGains;
+    }
+
+
 
 }
 
