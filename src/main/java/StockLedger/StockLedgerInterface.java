@@ -1,3 +1,5 @@
+package StockLedger;
+
 public interface StockLedgerInterface {
 
     /** Records a stock purchase in this ledger.
@@ -24,3 +26,4 @@ public interface StockLedgerInterface {
      @return  LedgerEntry object of stock symbol. */
     public LedgerEntry getEntry(String stockSymbol);
 }
+
