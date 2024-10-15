@@ -1,0 +1,6 @@
+# ignore IDE configurations
+.idea/
+*.xml
+
+# ignore .iml files
+*.iml
