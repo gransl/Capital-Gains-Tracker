@@ -181,7 +181,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
     //TODO: why is this here? Same method different name?
     @Override
     public Iterator<T> getIterator() {
-        return new LinkedDequeIterator();
+        return iterator();
     }
 
     /**
