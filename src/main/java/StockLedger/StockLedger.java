@@ -1,6 +1,7 @@
 package StockLedger;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class StockLedger implements StockLedgerInterface {
     private ArrayList<LedgerEntry> stocks;
@@ -29,7 +30,7 @@ public class StockLedger implements StockLedgerInterface {
         LedgerEntry tempLedger = getEntry(stockSymbol);
         stocks.remove(tempLedger);
         for (int i = 0; i < sharesBought; i++) {
-            tempLedger.addPurchaseFront(tempBuy);
+            tempLedger.addPurchaseBack(tempBuy);
         }
         stocks.add(tempLedger);
         totalExpenditures += sharesBought * pricePerShare;
@@ -110,6 +111,51 @@ public class StockLedger implements StockLedgerInterface {
         LedgerEntry newLedger = new LedgerEntry(stockSymbol);
         stocks.add(newLedger);
         return newLedger;
+    }
+
+    public String toString() {
+        StringBuilder str = new StringBuilder("---- Stock Ledger ----\n");
+
+        for (LedgerEntry ledger : stocks) {
+            Iterator<StockPurchase> stockItr = ledger.getIterator();
+            if (stockItr.hasNext()) {
+                StockPurchase tempStock = stockItr.next();
+                int currentShares = 1;
+                double currentCost = tempStock.getCost();
+                str.append(tempStock.getSymbol());
+                str.append(": ");
+                while (stockItr.hasNext()) {
+                    tempStock = stockItr.next();
+                    if (currentCost != tempStock.getCost()) {
+                        str.append(stockString(currentCost, currentShares));
+                        //str.insert(str.length()-1, stockString(currentCost, currentShares));
+                        currentCost = tempStock.getCost();
+                        currentShares = 1;
+                    } else {
+                        currentShares++;
+                    }
+                }
+                if (currentShares > 0) {
+                    str.append(stockString(currentCost, currentShares));
+                    int length = str.length();
+                    str.delete(length - 2, length - 1);
+                    str.append("\n");
+                }
+            }
+        }
+
+        String stockLedgerString = str.toString();
+        return stockLedgerString;
+    }
+
+    private String stockString(double currentCost, int currentShares) {
+        StringBuilder str = new StringBuilder("");
+        str.append(currentCost);
+        str.append(" (");
+        str.append(currentShares);
+        str.append(" shares), ");
+        String stockString = str.toString();
+        return stockString;
     }
 
     /**

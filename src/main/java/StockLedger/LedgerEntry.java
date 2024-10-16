@@ -2,6 +2,8 @@ package StockLedger;
 
 import Deque.LinkedDeque;
 
+import java.util.Iterator;
+
 /**
  * Holds Stock Purchase Objects for a single ticker symbol
  */
@@ -34,6 +36,10 @@ public class LedgerEntry {
 
     public StockPurchase removePurchaseBack() {
         return purchase.removeBack();
+    }
+
+    public Iterator getIterator() {
+        return purchase.getIterator();
     }
 
     public int size() {
