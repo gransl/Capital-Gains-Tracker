@@ -13,13 +13,19 @@ public class StockPurchase {
     /** Stock price */
     private double cost;
 
+    /**
+     * Full Constructor: creates a StockPurchase Object
+     *
+     * @param symbol ticker symbol, must not be empty or null
+     * @param cost stock price, must be greater than 0
+     */
     public StockPurchase(String symbol, double cost) {
-       if (symbol.isEmpty()) {
+       if (symbol.isEmpty() || symbol == null) {
            throw new IllegalArgumentException("Must enter ticker symbol");
        }
        this.symbol = symbol;
        if (cost <= 0) {
-           throw new IllegalArgumentException("Stock price must be greater than $0");
+           throw new IllegalArgumentException("Stock price must be greater than 0");
        }
        this.cost = cost;
     }

@@ -3,16 +3,22 @@ package StockLedger;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * StockLedger holds a record of bought and sold stocks.
+ * @author Sandra Gran
+ * @version 10-15-24
+ */
 public class StockLedger implements StockLedgerInterface {
+    /** holds a record of each stock's current stock holdings */
     private ArrayList<LedgerEntry> stocks;
-    private double totalExpenditures;
-    private double totalRevenue;
+    /** total capital gains made from all stock sales*/
     private double totalCapitalGains;
 
+    /**
+     * Creates a new empty stock ledger
+     */
     public StockLedger() {
         stocks = new ArrayList<>();
-        totalExpenditures = 0.0;
-        totalRevenue = 0.0;
         totalCapitalGains = 0.0;
     }
 
@@ -33,7 +39,6 @@ public class StockLedger implements StockLedgerInterface {
             tempLedger.addPurchaseBack(tempBuy);
         }
         stocks.add(tempLedger);
-        totalExpenditures += sharesBought * pricePerShare;
     }
 
     /**
@@ -70,7 +75,6 @@ public class StockLedger implements StockLedgerInterface {
 
         stocks.add(ledger);
 
-        totalRevenue = sharesSold * pricePerShare;
         capitalGain = sharesSold * pricePerShare - buyTotal;
         totalCapitalGains += capitalGain;
 
@@ -113,6 +117,13 @@ public class StockLedger implements StockLedgerInterface {
         return newLedger;
     }
 
+
+    /**
+     * Returns a string representation of the StockLedger.
+     *
+     * @return string of the StockLedger.
+     */
+    @Override
     public String toString() {
         StringBuilder str = new StringBuilder("---- Stock Ledger ----\n");
 
@@ -148,6 +159,13 @@ public class StockLedger implements StockLedgerInterface {
         return stockLedgerString;
     }
 
+    /**
+     *  Private helper method of toString. Creates a string with current costs and shares with a specific format.
+     *
+     * @param currentCost cost of current stock being reviewed
+     * @param currentShares number of shares of current share being reviewed
+     * @return string with current cost and share of current stock
+     */
     private String stockString(double currentCost, int currentShares) {
         StringBuilder str = new StringBuilder("");
         str.append(currentCost);
@@ -158,14 +176,6 @@ public class StockLedger implements StockLedgerInterface {
         return stockString;
     }
 
-    /**
-     * returns current total profit across all stock purchases and sells
-     *
-     * @return total profit
-     */
-    public double getProfit() {
-        return totalRevenue - totalExpenditures;
-    }
 
     /**
      * returns current total capital gains for all stock sells
