@@ -76,13 +76,13 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         }
 
         T oldFrontData = getFront();
-        DLNode<T> oldFront = front; //TODO: Do I need this? Does this get Garbage Collected w/o? pt 1
+        DLNode<T> oldFront = front;
         front = front.getNextNode();
 
         if (front == null) { // if the deque is now empty
             back = null;
         } else {
-            oldFront.setNextNode(null); //TODO: Do I need this? Does this get Garbage Collected w/o? pt 2
+            oldFront.setNextNode(null); //sever connect of old front node to disconnect this node entirely
             front.setPreviousNode(null); // sever connection to previous front node
         }
 
@@ -104,14 +104,14 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         }
 
         T oldBackData = back.getData();
-        DLNode<T> oldBackNode = back; //TODO: Do I need this? Does this get Garbage Collected w/o? pt 3
+        DLNode<T> oldBackNode = back;
         back = back.getPreviousNode();
 
         if (back == null) {
             front = null;
         } else {
-            oldBackNode.setPreviousNode(null); // severing old connection forwards //TODO: Do I need this pt 4
-            back.setNextNode(null); // severing the connection to previous back node
+            oldBackNode.setPreviousNode(null); // sever the old connection forwards to disconnect this node entirely
+            back.setNextNode(null); // sever the connection to previous back node
         }
 
         size = size - 1;
@@ -248,7 +248,6 @@ public class LinkedDeque<T> implements DequeInterface<T>{
     /** individual nodes of the LinkedDeque
      * @param <T> generic of type T
      */
-    //TODO: Consider preconditions for setters and getters
     private static class DLNode<T> {
 
         /** node before this one in deque */

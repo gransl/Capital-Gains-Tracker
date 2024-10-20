@@ -1,7 +1,6 @@
 package StockLedger;
 
 import Deque.LinkedDeque;
-
 import java.util.Iterator;
 
 /**
@@ -21,7 +20,7 @@ public class LedgerEntry {
      * @param symbol ticker symbol for stock, must not be empty or null.
      */
     public LedgerEntry(String symbol) {
-        if (symbol.isEmpty() || symbol == null) {
+        if (symbol == null || symbol.isEmpty()) {
             throw new IllegalArgumentException("Must enter ticker symbol");
         }
         this.symbol = symbol;
@@ -29,11 +28,24 @@ public class LedgerEntry {
     }
 
     /**
+     * Retrieves the ticker symbol associated with this LedgerEntry
+     *
+     * @return ticker symbol
+     */
+    public String getSymbol() {
+        return symbol;
+    }
+
+    /**
      * adds StockPurchase to the front of the LedgerEntry
      *
      * @param stock stock being added
+     * @throws IllegalArgumentException if the ticker symbol on the stock doesn't match the symbol of the ledger
      */
     public void addPurchaseFront(StockPurchase stock)  {
+        if (!stock.getSymbol().equals(symbol)) {
+            throw new IllegalArgumentException("Stock doesn't match Ledger.");
+        }
         purchase.addToFront(stock);
     }
 
@@ -43,26 +55,65 @@ public class LedgerEntry {
      * @param stock stock being added
      */
     public void addPurchaseBack(StockPurchase stock) {
+        if (!stock.getSymbol().equals(symbol)) {
+            throw new IllegalArgumentException("Stock doesn't match Ledger.");
+        }
         purchase.addToBack(stock);
     }
 
 
     /**
-     * removes and returns a StockPurchase from front of LedgerEntry
+     * Removes and returns a StockPurchase from front of LedgerEntry.
      *
-     * @return StockPurchase
+     * @return StockPurchase at back of LedgerEntry
      */
     public StockPurchase removePurchaseFront() {
         return purchase.removeFront();
     }
 
     /**
-     * removes and returns a StockPurchase from back of LedgerEntry
+     * Removes and returns a StockPurchase from back of LedgerEntry.
      *
-     * @return StockPurchase
+     * @return StockPurchase at back of LedgerEntry
      */
     public StockPurchase removePurchaseBack() {
         return purchase.removeBack();
+    }
+
+    /**
+     * Retrieves StockPurchase at front of LedgerEntry (without removing).
+     *
+     * @return StockPurchase at front of LedgerEntry
+     */
+    public StockPurchase getFront() {
+        return purchase.getFront();
+    }
+
+    /**
+     * Retrieves StockPurchase at back of LedgerEntry (without removing).
+     *
+     * @return StockPurchase at back of LedgerEntry
+     */
+    public StockPurchase getBack() {
+        return purchase.getBack();
+    }
+
+    /**
+     * Determines if LedgerEntry is empty.
+     *
+     * @return true if LedgerEntry is empty, false otherwise
+     */
+    public boolean isEmpty() {
+        return purchase.isEmpty();
+    }
+
+    /**
+     * Retrieves the number of stocks currently in the LedgerEntry
+     *
+     * @return number of stocks in LedgerEntry
+     */
+    public int size() {
+        return purchase.size();
     }
 
     /**
@@ -72,16 +123,6 @@ public class LedgerEntry {
      */
     public Iterator<StockPurchase> getIterator() {
         return purchase.getIterator();
-    }
-
-
-    /**
-     * Retrieves the number of stocks currently in the LedgerEntry
-     *
-     * @return number of stocks in LedgerEntry
-     */
-    public int size() {
-        return purchase.size();
     }
 
     /**

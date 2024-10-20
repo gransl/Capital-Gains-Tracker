@@ -1,6 +1,7 @@
 package StockLedger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -25,6 +26,7 @@ public class StockLedger implements StockLedgerInterface {
 
     /**
      * Records a stock purchase in this ledger.
+     * Time Complexity: O(n) where n = sharesBought
      *
      * @param stockSymbol   The stock's symbol.
      * @param sharesBought  The number of shares purchased.
@@ -42,8 +44,8 @@ public class StockLedger implements StockLedgerInterface {
     }
 
     /**
-     * Removes from this ledger any shares of a particular stock
-     * that were sold and computes the capital gain or loss.
+     * Removes from this ledger any shares of a particular stock that were sold and computes the capital gain or loss.
+     * Time Complexity: O(n) where n = sharesSold
      *
      * @param stockSymbol   The stock's symbol.
      * @param sharesSold    The number of shares sold.
@@ -82,7 +84,53 @@ public class StockLedger implements StockLedgerInterface {
     }
 
     /**
+     * Removes from this ledger any shares of a particular stock that were sold and computes the capital gain or loss.
+     * Contains additional logic to optimize each sale for highest capital gains
+     *
+     * Time Complexity: O(n) where n = sharesSold
+     *
+     * @param stockSymbol   The stock's symbol.
+     * @param sharesSold    The number of shares sold.
+     * @param pricePerShare The price per share.
+     * @return The capital gain (loss).
+     */
+    public double sellOptimal(String stockSymbol, int sharesSold, double pricePerShare) {
+        LedgerEntry ledger = getEntry(stockSymbol);
+        int ledgerSize = ledger.size();
+
+        if (ledgerSize == 0) {
+            stocks.remove(ledger);
+            throw new IllegalArgumentException("You do not have any shares of " + stockSymbol + ".");
+        } else if (sharesSold > ledgerSize) {
+            throw new IllegalArgumentException("You only have " + ledgerSize + " " + stockSymbol + " share(s).");
+        }
+
+        stocks.remove(ledger);
+        StockPurchase tempPurchase;
+
+        double buyTotal = 0;
+        double capitalGain = 0;
+
+        for (int i = 0; i < sharesSold; i++) {
+            if (ledger.getFront().getCost() <= ledger.getBack().getCost()) {
+                tempPurchase = ledger.removePurchaseFront();
+            } else {
+                tempPurchase = ledger.removePurchaseBack();
+            }
+            buyTotal += tempPurchase.getCost();
+        }
+
+        stocks.add(ledger);
+
+        capitalGain = (sharesSold * pricePerShare) - buyTotal;
+        totalCapitalGains += capitalGain;
+
+        return capitalGain;
+    }
+
+    /**
      * Returns a boolean on whether the passed in stock symbol is contained in the ledger.
+     * Time Complexity: O(n) where n = number of LedgerEntry in StockLedger
      *
      * @param stockSymbol The stock's symbol.
      * @return Boolean of if the stock exists in the ledger.
@@ -99,6 +147,7 @@ public class StockLedger implements StockLedgerInterface {
 
     /**
      * Returns a LedgerEntry object based on stock symbol.
+     * Time Complexity: O(n) where n = number of LedgerEntry in StockLedger
      *
      * @param stockSymbol The stock's symbol.
      * @return LedgerEntry object of stock symbol.
@@ -139,21 +188,22 @@ public class StockLedger implements StockLedgerInterface {
                     tempStock = stockItr.next();
                     if (currentCost != tempStock.getCost()) {
                         str.append(stockString(currentCost, currentShares));
-                        //str.insert(str.length()-1, stockString(currentCost, currentShares));
                         currentCost = tempStock.getCost();
                         currentShares = 1;
                     } else {
                         currentShares++;
                     }
                 }
-                if (currentShares > 0) {
-                    str.append(stockString(currentCost, currentShares));
-                    int length = str.length();
-                    str.delete(length - 2, length - 1);
-                    str.append("\n");
-                }
+
+
+                //append shares of final share price to end
+                str.append(stockString(currentCost, currentShares));
+                int length = str.length();
+                str.delete(length - 2, length - 1);
+                str.append("\n");
             }
         }
+
 
         String stockLedgerString = str.toString();
         return stockLedgerString;
@@ -185,8 +235,6 @@ public class StockLedger implements StockLedgerInterface {
     public double getCapitalGains() {
         return totalCapitalGains;
     }
-
-
 
 }
 

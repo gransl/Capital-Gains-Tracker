@@ -20,7 +20,7 @@ public class StockPurchase {
      * @param cost stock price, must be greater than 0
      */
     public StockPurchase(String symbol, double cost) {
-       if (symbol.isEmpty() || symbol == null) {
+       if (symbol == null || symbol.isEmpty()) {
            throw new IllegalArgumentException("Must enter ticker symbol");
        }
        this.symbol = symbol;
