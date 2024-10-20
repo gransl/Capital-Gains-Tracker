@@ -27,7 +27,6 @@ public class Main {
         System.out.println(myLedger);
         myLedger.sell("MSFT", 2, 30);
         System.out.println(myLedger);
-        System.out.println("Total Capital Gains: " + myLedger.getCapitalGains());
 
         System.out.println();
         System.out.println("---------------------------");
@@ -59,7 +58,6 @@ public class Main {
         System.out.println(myLedgerOptimal);
         myLedgerOptimal.sellOptimal("MSFT", 2, 30);
         System.out.println(myLedgerOptimal);
-        System.out.println("Total Capital Gains: " + myLedgerOptimal.getCapitalGains());
 
     }
 }

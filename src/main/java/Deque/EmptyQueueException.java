@@ -4,7 +4,6 @@ package Deque;
  * Thrown by methods to indicate when a Queue or Deque is Empty.
  */
 public class EmptyQueueException extends RuntimeException {
-
     /**
      * Constructs a new EmptyQueueException with null as its error message string.
      */
@@ -14,7 +13,7 @@ public class EmptyQueueException extends RuntimeException {
 
 
     /** Constructs a new EmptyQueueException with custom message as its error message string.
-     * @param message error message
+     * @param message Error message
      */
     EmptyQueueException(String message) {
         super(message);

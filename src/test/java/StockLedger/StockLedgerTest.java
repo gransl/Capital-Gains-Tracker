@@ -57,19 +57,25 @@ class StockLedgerTest {
                 ---- Stock Ledger ----
                 PLAY: 45.0 (20 shares), 75.0 (20 shares)\s
                 CAKE: 95.0 (20 shares)\s
+                
+                Total Capital Gains: $0.0
                 """, ledger2.toString());
         ledger2.sell("PLAY", 30, 65);
         assertEquals("""
                 ---- Stock Ledger ----
                 CAKE: 95.0 (20 shares)\s
                 PLAY: 75.0 (10 shares)\s
+                
+                Total Capital Gains: $300.0
                 """, ledger2.toString());
         ledger2.sell("PLAY", 10, 65);
         assertEquals("""
                 ---- Stock Ledger ----
                 CAKE: 95.0 (20 shares)\s
+                
+                Total Capital Gains: $200.0
                 """, ledger2.toString());
-        assertEquals("---- Stock Ledger ----\n", emptyLedger.toString());
+        assertEquals("---- Stock Ledger ----\n\nTotal Capital Gains: $0.0\n", emptyLedger.toString());
     }
 
     @Test

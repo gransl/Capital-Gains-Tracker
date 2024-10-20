@@ -7,11 +7,11 @@ package StockLedger;
  * @version 10-15-2024
  */
 public class StockPurchase {
+    /** Ticker symbol for stock being purchased, final because this shouldn't be altered */
+    private final String symbol;
+    /** Stock price, final because this shouldn't be altered  */
+    private final double cost;
 
-    /** Ticker symbol for stock being purchased */
-    private String symbol;
-    /** Stock price */
-    private double cost;
 
     /**
      * Full Constructor: creates a StockPurchase Object
@@ -31,18 +31,22 @@ public class StockPurchase {
     }
 
 
-    /** retrieves the ticker symbol for the stock
+    /**
+     * retrieves the ticker symbol for the stock
+     *
      * @return ticker symbol for stock
      */
     public String getSymbol() {
         return symbol;
     }
 
-    /** retrieves the stock price for this purchase
+
+    /**
+     * retrieves the stock price for this purchase
+     *
      * @return the stock price
      */
     public double getCost() {
         return cost;
     }
-
 }

@@ -11,8 +11,9 @@ import java.util.Iterator;
 public class LedgerEntry {
     /** deque that holds each StockPurchase */
     private LinkedDeque<StockPurchase> purchase;
-    /** the stock ticker symbol for this LedgerEntry */
-    private String symbol;
+    /** the stock ticker symbol for this LedgerEntry, final because this should not be altered once set */
+    private final String symbol;
+
 
     /**
      * Constructor for LedgerEntry object.
@@ -27,6 +28,7 @@ public class LedgerEntry {
         purchase = new LinkedDeque<>();
     }
 
+
     /**
      * Retrieves the ticker symbol associated with this LedgerEntry
      *
@@ -35,6 +37,7 @@ public class LedgerEntry {
     public String getSymbol() {
         return symbol;
     }
+
 
     /**
      * adds StockPurchase to the front of the LedgerEntry
@@ -48,6 +51,7 @@ public class LedgerEntry {
         }
         purchase.addToFront(stock);
     }
+
 
     /**
      * adds StockPurchase to the back of the LedgerEntry
@@ -71,6 +75,7 @@ public class LedgerEntry {
         return purchase.removeFront();
     }
 
+
     /**
      * Removes and returns a StockPurchase from back of LedgerEntry.
      *
@@ -79,6 +84,7 @@ public class LedgerEntry {
     public StockPurchase removePurchaseBack() {
         return purchase.removeBack();
     }
+
 
     /**
      * Retrieves StockPurchase at front of LedgerEntry (without removing).
@@ -89,6 +95,7 @@ public class LedgerEntry {
         return purchase.getFront();
     }
 
+
     /**
      * Retrieves StockPurchase at back of LedgerEntry (without removing).
      *
@@ -97,6 +104,7 @@ public class LedgerEntry {
     public StockPurchase getBack() {
         return purchase.getBack();
     }
+
 
     /**
      * Determines if LedgerEntry is empty.
@@ -107,6 +115,7 @@ public class LedgerEntry {
         return purchase.isEmpty();
     }
 
+
     /**
      * Retrieves the number of stocks currently in the LedgerEntry
      *
@@ -115,6 +124,7 @@ public class LedgerEntry {
     public int size() {
         return purchase.size();
     }
+
 
     /**
      * Retrieves an iterator to iterate through LedgerEntry.
@@ -125,6 +135,7 @@ public class LedgerEntry {
         return purchase.getIterator();
     }
 
+
     /**
      * This method determines if a ticker symbol matches a LedgerEntry
      *
@@ -132,10 +143,6 @@ public class LedgerEntry {
      * @return true if a ticker symbol matches LedgerEntry, false if not
      */
     public boolean matchesSymbol(String stockSymbol) {
-        if (this.symbol.equals(stockSymbol)) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.symbol.equals(stockSymbol);
     }
 }

@@ -15,8 +15,9 @@ public class LinkedDeque<T> implements DequeInterface<T>{
     private DLNode<T> front;
     /** the last node in the deque */
     private DLNode<T> back;
-    /** the size of the deque */
+    /** the size of the deque, I added this field to make this data structure useful in more contexts */
     private int size;
+
 
     /**
      * Creates an empty LinkedDeque object
@@ -26,6 +27,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         back = null;
         size = 0;
     }
+
 
     /**
      * Adds a new entry to the front of this deque.
@@ -45,6 +47,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         size = size + 1;
     }
 
+
     /**
      * Adds a new entry to the back of this deque.
      *
@@ -62,6 +65,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         }
         size = size + 1;
     }
+
 
     /**
      * Removes and returns the front entry of this deque.
@@ -91,6 +95,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         return oldFrontData;
     }
 
+
     /**
      * Removes and returns the back entry of this deque.
      *
@@ -119,6 +124,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         return oldBackData;
     }
 
+
     /**
      * Detects whether this deque is empty.
      *
@@ -128,6 +134,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
     public boolean isEmpty() {
         return (front == null);
     }
+
 
     /**
      * Returns the front entry's data.
@@ -143,6 +150,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         return front.getData();
     }
 
+
     /**
      * Returns the back entry's data.
      *
@@ -157,14 +165,13 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         return back.getData();
     }
 
+
     /**
      * Removes all the entries from the queue.
-     *
      * I chose this implementation rather than front = null, back = null because even though the user could no longer
      * access the items in the deque, I believe they still exist in memory because there are still references to the
      * nodes. I believe this method (and with the way I crafted the remove methods) all the references to the nodes
      * should be removed.
-     *
      * Time Complexity: O(n)
      */
     @Override
@@ -174,6 +181,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         }
     }
 
+
     /**
      * This method gets and returns the size of the deque
      *
@@ -182,6 +190,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
     public int size() {
         return size;
     }
+
 
     /**
      * Creates iterators to iterate through deque.
@@ -204,6 +213,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         return iterator();
     }
 
+
     /**
      * Iterator object for the LinkedDeque
      */
@@ -218,6 +228,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
             current = front;
         }
 
+
         /**
          * This method determines if there is another element in the iteration
          *
@@ -226,6 +237,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         public boolean hasNext() {
             return current != null;
         }
+
 
         /**
          * Returns the next element in the iteration.
@@ -245,11 +257,11 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         }
     }
 
+
     /** individual nodes of the LinkedDeque
      * @param <T> generic of type T
      */
     private static class DLNode<T> {
-
         /** node before this one in deque */
         private DLNode<T> previousNode;
         /** data stored in node */
@@ -267,6 +279,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
             this(null, newNodeData, null);
         }
 
+
         /**
          * Full constructor: Can set node data, and both pointers to a specific node
          *
@@ -280,6 +293,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
             setNextNode(nextNode);
         }
 
+
         /**
          * returns data stored in node
          *
@@ -288,6 +302,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         public T getData() {
             return nodeData;
         }
+
 
         /**
          * sets the data stored in the node
@@ -298,6 +313,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
             nodeData = newNodeData;
         }
 
+
         /**
          * returns the node previous to this one
          *
@@ -306,6 +322,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         public DLNode<T> getPreviousNode(){
             return previousNode;
         }
+
 
         /**
          * sets a node as the node previous to this one
@@ -316,6 +333,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
             this.previousNode = previousNode;
         }
 
+
         /**
          * returns the node next to this one
          *
@@ -325,6 +343,7 @@ public class LinkedDeque<T> implements DequeInterface<T>{
             return nextNode;
         }
 
+
         /**
          * set a node as the node next to this one
          *
@@ -333,6 +352,5 @@ public class LinkedDeque<T> implements DequeInterface<T>{
         public void setNextNode(DLNode<T> nextNode) {
             this.nextNode = nextNode;
         }
-
     }
 }

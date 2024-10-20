@@ -15,12 +15,23 @@ public class StockLedger implements StockLedgerInterface {
     /** total capital gains made from all stock sales*/
     private double totalCapitalGains;
 
+
     /**
      * Creates a new empty stock ledger
      */
     public StockLedger() {
         stocks = new ArrayList<>();
         totalCapitalGains = 0.0;
+    }
+
+
+    /**
+     * returns current total capital gains for all stock sells.
+     *
+     * @return total capital gains
+     */
+    public double getCapitalGains() {
+        return totalCapitalGains;
     }
 
 
@@ -43,12 +54,13 @@ public class StockLedger implements StockLedgerInterface {
         stocks.add(tempLedger);
     }
 
+
     /**
      * Removes from this ledger any shares of a particular stock that were sold and computes the capital gain or loss.
      * Time Complexity: O(n) where n = sharesSold
      *
      * @param stockSymbol   The stock's symbol.
-     * @param sharesSold    The number of shares sold.
+     * @param sharesSold    The number of shares sold (must be less than or equal to number of currently owned shares).
      * @param pricePerShare The price per share.
      * @return The capital gain (loss).
      */
@@ -74,6 +86,15 @@ public class StockLedger implements StockLedgerInterface {
         return capitalGain;
     }
 
+
+    /**
+     * This method assists both buy methods by fetching the ledger associated with the stock and
+     * checking necessary preconditions.
+     *
+     * @param stockSymbol The stock's symbol
+     * @param sharesSold The number of shares sold (must be less than or equal to number of currently owned shares).
+     * @return LedgerEntry that matches the stock symbol
+     */
     private LedgerEntry sellAssistant(String stockSymbol, int sharesSold) {
         LedgerEntry ledger = getEntry(stockSymbol);
         int ledgerSize = ledger.size();
@@ -87,13 +108,14 @@ public class StockLedger implements StockLedgerInterface {
         return ledger;
     }
 
+
     /**
      * Removes from this ledger any shares of a particular stock that were sold and computes the capital gain or loss.
      * Contains additional logic to optimize each sale for highest capital gains
      * Time Complexity: O(n) where n = sharesSold
      *
      * @param stockSymbol   The stock's symbol.
-     * @param sharesSold    The number of shares sold.
+     * @param sharesSold    The number of shares sold (must be less than or equal to number of currently owned shares).
      * @param pricePerShare The price per share.
      * @return The capital gain (loss).
      */
@@ -122,6 +144,7 @@ public class StockLedger implements StockLedgerInterface {
         return capitalGain;
     }
 
+
     /**
      * Returns a boolean on whether the passed in stock symbol is contained in the ledger.
      * Time Complexity: O(n) where n = number of LedgerEntry in StockLedger
@@ -138,6 +161,7 @@ public class StockLedger implements StockLedgerInterface {
         }
         return false;
     }
+
 
     /**
      * Returns a LedgerEntry object based on stock symbol.
@@ -163,6 +187,7 @@ public class StockLedger implements StockLedgerInterface {
 
     /**
      * Returns a string representation of the StockLedger.
+     * Includes total capital gains of all stocks sold on this ledger.
      *
      * @return string of the StockLedger.
      */
@@ -197,10 +222,13 @@ public class StockLedger implements StockLedgerInterface {
                 str.append("\n");
             }
         }
-
+        str.append("\nTotal Capital Gains: $");
+        str.append(totalCapitalGains);
+        str.append("\n");
 
         return str.toString();
     }
+
 
     /**
      *  Private helper method of toString. Creates a string with current costs and shares with a specific format.
@@ -215,16 +243,5 @@ public class StockLedger implements StockLedgerInterface {
                 currentShares +
                 " shares), ";
     }
-
-
-    /**
-     * returns current total capital gains for all stock sells
-     *
-     * @return total capital gains
-     */
-    public double getCapitalGains() {
-        return totalCapitalGains;
-    }
-
 }
 
