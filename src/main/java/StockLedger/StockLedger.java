@@ -1,7 +1,6 @@
 package StockLedger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -10,8 +9,9 @@ import java.util.Iterator;
  * @version 10-15-24
  */
 public class StockLedger implements StockLedgerInterface {
-    /** holds a record of each stock's current stock holdings */
-    private ArrayList<LedgerEntry> stocks;
+    /** holds a record of each stock's current stock holdings
+     * final because we never need to change what stocks is, just the ledgers inside of it */
+    private final ArrayList<LedgerEntry> stocks;
     /** total capital gains made from all stock sales*/
     private double totalCapitalGains;
 
@@ -54,18 +54,9 @@ public class StockLedger implements StockLedgerInterface {
      */
     @Override
     public double sell(String stockSymbol, int sharesSold, double pricePerShare) {
-        LedgerEntry ledger = getEntry(stockSymbol);
-        int ledgerSize = ledger.size();
-
-        if (ledgerSize == 0) {
-            stocks.remove(ledger);
-            throw new IllegalArgumentException("You do not have any shares of " + stockSymbol + ".");
-        } else if (sharesSold > ledgerSize) {
-            throw new IllegalArgumentException("You only have " + ledgerSize + " " + stockSymbol + " share(s).");
-        }
+        LedgerEntry ledger = sellAssistant(stockSymbol, sharesSold);
 
         double buyTotal = 0;
-        double capitalGain = 0;
 
         stocks.remove(ledger);
         StockPurchase tempPurchase;
@@ -77,24 +68,13 @@ public class StockLedger implements StockLedgerInterface {
 
         stocks.add(ledger);
 
-        capitalGain = sharesSold * pricePerShare - buyTotal;
+        double capitalGain = sharesSold * pricePerShare - buyTotal;
         totalCapitalGains += capitalGain;
 
         return capitalGain;
     }
 
-    /**
-     * Removes from this ledger any shares of a particular stock that were sold and computes the capital gain or loss.
-     * Contains additional logic to optimize each sale for highest capital gains
-     *
-     * Time Complexity: O(n) where n = sharesSold
-     *
-     * @param stockSymbol   The stock's symbol.
-     * @param sharesSold    The number of shares sold.
-     * @param pricePerShare The price per share.
-     * @return The capital gain (loss).
-     */
-    public double sellOptimal(String stockSymbol, int sharesSold, double pricePerShare) {
+    private LedgerEntry sellAssistant(String stockSymbol, int sharesSold) {
         LedgerEntry ledger = getEntry(stockSymbol);
         int ledgerSize = ledger.size();
 
@@ -104,12 +84,26 @@ public class StockLedger implements StockLedgerInterface {
         } else if (sharesSold > ledgerSize) {
             throw new IllegalArgumentException("You only have " + ledgerSize + " " + stockSymbol + " share(s).");
         }
+        return ledger;
+    }
+
+    /**
+     * Removes from this ledger any shares of a particular stock that were sold and computes the capital gain or loss.
+     * Contains additional logic to optimize each sale for highest capital gains
+     * Time Complexity: O(n) where n = sharesSold
+     *
+     * @param stockSymbol   The stock's symbol.
+     * @param sharesSold    The number of shares sold.
+     * @param pricePerShare The price per share.
+     * @return The capital gain (loss).
+     */
+    public double sellOptimal(String stockSymbol, int sharesSold, double pricePerShare) {
+        LedgerEntry ledger = sellAssistant(stockSymbol, sharesSold);
 
         stocks.remove(ledger);
         StockPurchase tempPurchase;
 
         double buyTotal = 0;
-        double capitalGain = 0;
 
         for (int i = 0; i < sharesSold; i++) {
             if (ledger.getFront().getCost() <= ledger.getBack().getCost()) {
@@ -122,7 +116,7 @@ public class StockLedger implements StockLedgerInterface {
 
         stocks.add(ledger);
 
-        capitalGain = (sharesSold * pricePerShare) - buyTotal;
+        double capitalGain = (sharesSold * pricePerShare) - buyTotal;
         totalCapitalGains += capitalGain;
 
         return capitalGain;
@@ -205,8 +199,7 @@ public class StockLedger implements StockLedgerInterface {
         }
 
 
-        String stockLedgerString = str.toString();
-        return stockLedgerString;
+        return str.toString();
     }
 
     /**
@@ -217,13 +210,10 @@ public class StockLedger implements StockLedgerInterface {
      * @return string with current cost and share of current stock
      */
     private String stockString(double currentCost, int currentShares) {
-        StringBuilder str = new StringBuilder("");
-        str.append(currentCost);
-        str.append(" (");
-        str.append(currentShares);
-        str.append(" shares), ");
-        String stockString = str.toString();
-        return stockString;
+        return currentCost +
+                " (" +
+                currentShares +
+                " shares), ";
     }
 
 

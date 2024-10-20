@@ -160,4 +160,13 @@ class LinkedDequeTest {
         assertFalse(dblIterator2.hasNext());
         assertTrue(dblIterator3.hasNext());
     }
+
+    private void throwException(){
+        throw new EmptyQueueException();
+    }
+
+    @Test
+    void extraLinkedDequeTest() {
+        assertThrows(EmptyQueueException.class, () -> throwException());
+    }
 }
